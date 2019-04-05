@@ -1,16 +1,16 @@
 {
-  "name": "qarisaab",
+  "name": "spirograph",
   "version": "1.0.0",
-  "description": "a web app to be",
+  "description": "a web app to relax",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preview": "git commit -a -m \"Commit for previewing\" && surge --project ./ --domain \"qarisaab.surge.sh\" ",
-    "surgify": "surge --project ./ --domain \"qarisaab.surge.sh\" "
+    "preview": "git commit -a -m \"Commit for previewing\" && surge --project ./ --domain \"spirograph.surge.sh\" ",
+    "surgify": "surge --project ./ --domain \"spirograph.surge.sh\" "
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wittnesstech/qarisaab.git"
+    "url": "git+https://github.com/thenewadeel/spirograph.git"
   },
   "keywords": [
     "qari",
@@ -20,9 +20,9 @@
   "author": "Ad",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wittnesstech/qarisaab/issues"
+    "url": "https://github.com/thenewadeel/spirograph/issues"
   },
-  "homepage": "https://github.com/wittnesstech/qarisaab#readme",
+  "homepage": "https://github.com/thenewadeel/spirograph#readme",
   "devDependencies": {
     "@types/matter-js": "^0.10.2",
     "@types/p5": "^0.7.2",

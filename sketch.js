@@ -1,138 +1,59 @@
 /// <reference path="./node_modules/@types/p5/global.d.ts" />
 /// <reference path="./node_modules/@types/matter-js/index.d.ts" />
-// Daniel Shiffman
-// http://codingtra.in
-// http://patreon.com/codingtrain
-// Code for: https://youtu.be/W-ou_sVlTWk
+var spiral, disc;
+var angle = 0;
+var pointer, pointer2;
+var vertices = [];
+let quiver;
 
-// module aliases
-var Engine = Matter.Engine,
-  // Render = Matter.Render,
-  World = Matter.World,
-  Bodies = Matter.Bodies,
-  Constraint = Matter.Constraint,
-  Mouse = Matter.Mouse,
-  MouseConstraint = Matter.MouseConstraint;
-
-var engine;
-var world;
-var particles = [];
-var boundaries = [];
-
-var ground;
-
-var mConstraint;
-let preloaded, ayahString;
-function preload() {
-  preloaded = loadJSON("https://api.alquran.cloud/v1/ayah/" + Math.floor(1 + random(6666)));
-  // preloaded = {
-  //   "data": {
-  //     "edition": { "identifier": "quran-simple", "language": "ar", "name": "Simple", "englishName": "Simple", "format": "text" },
-  //     "hizbQuarter": 2,
-  //     "juz": 1,
-  //     "manzil": 1,
-  //     "number": 33,
-  //     "numberInSurah": 26,
-  //     "page": 5,
-  //     "ruku": 4,
-  //     "sajda": false,
-  //     "surah": { "number": 2, "name": "سورة البقرة", "englishName": "Al-Baqara", "englishNameTranslation": "The Cow", "numberOfAyahs": 286 },
-  //     "text": "۞ إِنَّ اللَّهَ لَا يَسْتَحْيِي أَنْ يَضْرِبَ مَثَلًا مَا بَعُوضَةً فَمَا فَوْقَهَا ۚ فَأَمَّا الَّذِينَ آمَنُوا فَيَعْلَمُونَ أَنَّهُ الْحَقُّ مِنْ رَبِّهِمْ ۖ َ"
-  //   }
-  // }
-}
+function preload() {}
 function setup() {
-  // console.log('preloaded:', preloaded);
-  ayahString = preloaded.data.text;
   var canvas = createCanvas(window.innerWidth, window.innerHeight);
-  engine = Engine.create();
-  world = engine.world;
-  //Engine.run(engine);
-
-  beadify(ayahString);
-
-  //boundaries
-  boundaries.push(new Boundary(200, height, width, 50, 0));
-
-  var canvasmouse = Mouse.create(canvas.elt);
-  canvasmouse.pixelRatio = pixelDensity();
-  //console.log(canvasmouse);
-  var options = {
-    mouse: canvasmouse
-  }
-  mConstraint = MouseConstraint.create(engine, options);
-  World.add(world, mConstraint);
-  // console.log(mConstraint);
+  // spiral=new Spiral(41,123);
+  // pointer = createVector(1.2, 0.2);
+  // disc = new Disc(pointer.x,pointer.y);
+  quiver = new Quiver();
+  quiver.init();
 }
-
-// function keyPressed() {
-//   if (key == ' ') {
-//   }
-// }
-
-// function mouseDragged() {
-//   circles.push(new Circle(mouseX, mouseY, random(5, 10)));
-// }
-// let tokens, token;
-function beadify(inString) {
-  let words = inString.split(' ');
-  //particles
-  var prev = null;
-  // for (var x = 200; x < 400; x += 20) {
-  for (var i = 0; i < words.length; i++) {
-    var fixed = false;
-    if (!prev || i + 1 == words.length) {
-      fixed = true;
-    }
-    var p = new Particle(i * 70, 100, 30, fixed, words[i]);
-    // var p2 = new Particle(200, 150, 10);
-    particles.push(p);
-    if (prev) {
-      var options = {
-        bodyA: p.body,
-        bodyB: prev.body,
-        length: 15,
-        stiffness: 0.4
-      };
-      var constraint = Constraint.create(options);
-      World.add(world, constraint);
-    }
-    prev = p;
-  }
-}
-
 function draw() {
-  translate(posX?posX:0,posY?posY:0);
-  background(51,50,75);
+  translate(posX ? posX : width / 2, posY ? posY : height / 2);
+  background(127);
   stroke(255);
-  fill(100,128,100);
-  textSize(48)
-  // text(ayahString, width / 3, height / 3)//,width/2 + 50,height/2 + 50)
-  // tokens = ayahString.split(' ');
-  // for (var index = 0; index < tokens.length; index++) {
-
-  //   text(tokens[index], 10 + 7 * index, 15 + 7 * index)//,width/2 + 50,height/2 + 50)
-  // }
-
-  Engine.update(engine);
-  for (var i = 0; i < boundaries.length; i++) {
-    boundaries[i].show();
+  // fill(10,128,100);
+  noFill();
+  pointer.limit(mouseX||200);
+  pointer.rotate((0.2 * PI) / 124);
+  pointer2 = pointer.mult(-1.1);
+  // pointer2.limit(100)
+  // pointer2.rotate((0.2 * PI) / 12);
+  vertices.push(
+    { x: pointer2.x, y: pointer2.y },
+    { x: pointer.x, y: pointer.y }
+  );
+  beginShape();
+  for (var j = 0; j < vertices.length; j++) {
+    vertex(vertices[j].x, vertices[j].y);
   }
-
-  for (var i = 0; i < particles.length; i++) {
-    particles[i].show();
-  }
-
-  //line(particles[0].body.position.x, particles[0].body.position.y, particles[1].body.position.x, particles[1].body.position.y);
-
-  if (mConstraint.body) {
-    var pos = mConstraint.body.position;
-    var offset = mConstraint.constraint.pointB;
-    var m = mConstraint.mouse.position;
-    stroke(0, 255, 0);
-    line(pos.x + offset.x, pos.y + offset.y, m.x, m.y);
-    
-    //disable canvas dragging feature
-    locked=false
-  }
+  endShape();
+  // endShape();
+  // disc.show();
+  // disc.setVector(pointer);
 }
+/*
+angle+=0.01;
+  push()
+  disc.rotator(angle);
+  beginShape();
+  disc.show();
+  
+  pop();
+  endShape();
+  // rectMode(CENTER);
+  rect(-width/2,-height/2,180,75)
+  var message=disc.status();
+  var k=1;
+  for(var msg in  message){
+    text(msg +" : " +message[msg],-width/2+5,-height/2 + k*15)
+    k++
+  }
+*/
