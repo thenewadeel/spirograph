@@ -1,6 +1,6 @@
 let Quiver = function(depth, rotSpeedLimit) {
   //   this.ads = createVector(width / 4, height / 4);
-  this.rotSpeed = rotSpeedLimit || PI / 4;
+  this.rotSpeed = rotSpeedLimit || PI / 8;
   this.depth = depth || 2;
   this.arrows = [];
   this.init = function() {

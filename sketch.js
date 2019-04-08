@@ -17,7 +17,7 @@ function setup() {
 function draw() {
   translate(posX ? posX : width / 2, posY ? posY : height / 2);
   background(220);
-  stroke(25);
+  stroke(250,12,77);
   noFill();
   if (trace) {
     beginShape();
@@ -50,6 +50,9 @@ function keyReleased() {
   }
   if (key == "d") {
     display = !display;
+  }
+  if (key == "x") {
+    accelerate=!accelerate;
   }
   if (key == "+") {//NOT YET IMPLEMENTED
     speedFacror*= 2;
