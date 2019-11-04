@@ -4,7 +4,7 @@
     <script
       language="javascript"
       type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"
+      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"
     ></script>
     <script
       language="javascript"
@@ -36,8 +36,26 @@
         padding: 0;
         margin: 0;
       }
+      #activated {
+        color: red;
+      }
+      #inactive {
+        color: blue;
+      }
+      #homing {
+        color: green;
+      }
     </style>
   </head>
 
-  <body></body>
+  <body>
+    <div id="canvas"></div>
+    <div id="console"></div>
+    <div id="help">
+      left click: Homing Mode (Green blobs)<br />
+      right click: Activate Blobs (Red blobs)<br />
+      shift + click: Deactivate Blobs (Blue blobs)<br />
+      ctrl + click: Reset
+    </div>
+  </body>
 </html>

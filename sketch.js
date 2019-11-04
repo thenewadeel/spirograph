@@ -8,14 +8,15 @@
 var circles;
 var spots, darkSpots;
 var img;
-let TOTAL_CIRCLES = 2000;
+let TOTAL_CIRCLES = 1000;
 let singleActivation = false;
 function preload() {
-  img = loadImage("clip1.png");
+  img = loadImage("clip2.png");
 }
 
 function setup() {
-  createCanvas(img.width, img.height);
+  let cx = createCanvas(img.width, img.height);
+  cx.parent("canvas");
   var density = displayDensity();
   pixelDensity(1);
   img.loadPixels();
@@ -42,9 +43,35 @@ function setup() {
   // console.log(density);
   // console.log(pixelDensity());
 }
-
+function summary() {
+  let active = 0;
+  let nonActive = 0;
+  let homing = 0;
+  for (let cir of circles) {
+    if (cir.homing) {
+      homing++;
+    } else if (cir.activated) {
+      active++;
+    } else {
+      nonActive++;
+    }
+  }
+  return (
+    "Total circles: " +
+    circles.length +
+    ", <span id='activated'>Activated: " +
+    active +
+    "</span>,<span id='inactive'> Non-Active: " +
+    nonActive +
+    ",</span><span id='homing'> Homing: " +
+    homing +
+    "</span>"
+  );
+}
 function draw() {
-  background(250);
+  let xxx = document.getElementById("console"); //.innerHTML("testing");
+  xxx.innerHTML = summary();
+  background(230);
   translate(posX, posY);
   if (circles.length < TOTAL_CIRCLES) {
     populateCircles();
@@ -63,7 +90,7 @@ function draw() {
   // frameRate(20)
 }
 function populateCircles() {
-  var total = 15;
+  var total = 25;
   var count = 0;
   var attempts = 0;
 
@@ -77,7 +104,7 @@ function populateCircles() {
     attempts++;
     if (attempts > 1000) {
       // noLoop();
-      console.log("finished");
+      // console.log("finished");
       break;
     }
   }
@@ -130,19 +157,24 @@ function newCircle() {
   }
 }
 function mousePressed(e) {
-  console.log("pressed", e);
-  e.preve;
+  // console.log("pressed", e);
+  // e.preve;
+  e.preventDefault();
   if (e.shiftKey) {
-    for (circ of circles) {
-      circ.homeOn();
-    }
-  } else if (e.button === 2) {
     for (circ of circles) {
       circ.deavtivate();
     }
-  } else if (e.button === 0) {
+  } else if (e.ctrlKey) {
+    for (circ of circles) {
+      circ.reset();
+    }
+  } else if (e.button === 2) {
     for (circ of circles) {
       circ.activate();
+    }
+  } else if (e.button === 0) {
+    for (circ of circles) {
+      circ.homeingToggle();
     }
   }
 }
